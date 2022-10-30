@@ -1,0 +1,116 @@
+﻿@model IEnumerable<u21478377_HW06.ViewModels.ProductVM>
+@{
+    ViewBag.Title = "Order";
+
+    //declare variable
+
+    Pager pager = new Pager();
+
+    int pageNumber = 0;
+
+    //check if page exists first because viewbag doesnot return errors, only runtime errors
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNumber = pager.CurrentPage; //store in page number variable
+    }
+}
+@{
+    ViewBag.Title = "Order";
+
+    //declare variable
+
+    Pager pager = new Pager();
+
+    int pageNumber = 0;
+
+    //check if page exists first because viewbag doesnot return errors, only runtime errors
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNumber = pager.CurrentPage; //store in page number variable
+    }
+}
+
+<h1>Index</h1>
+
+<h1>Orders</h1>
+
+<div class="search">
+    <form>
+        <input type="datetime" asp:TextButton />
+        <asp:Button id="Button" Text="Search"></asp:Button>
+    </form>
+</div>
+<!--cards, dynamic load from database-->
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class=" card" name="row">
+
+            <div class="card-body">
+                <div class="card-title"> Order - @item.ProductDetails.ProductId - @item.OrderDetails.OrderDate </div>
+                <div class=" card-text">
+                    <!--table comes here-->
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Product Name</td>
+                                <td>List Price</td>
+                                <td> Quantity</td>
+                                <td>Total</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td name="names">@item.ProductDetails.ProductName</td>
+                                <td name="listprice">@item.ProductDetails.ListPrice</td>
+                                <td name="quantity">@item.ItemDetails.Quantity</td>
+                                <td id="total" onload="Total()">@item.Total</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>GrandTotal:</td>
+                                <td id="grandTotal">(@item.GrandTotal</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    function Total() {
+        var listprice = document.getElementsByName("listprice").values
+        var quanitites = document.getElementsByName("quantity").values
+        var count = document.getElementsByName("rows").Count();
+        var total = 0
+
+        foreach(var i = 0; i < count.Rows.Count(); i++)
+        {
+            total = listprice * quanitities
+            return total = document.getElementById("total").innerHTML;
+        }
+    }
+
+    function GetTotal() {
+        var rowcard = document.getElementByName("rows").Count()
+        var tablerows = document.getElementsByName("names").Count()
+        var grandtotal = 0;
+
+        foreach(var x = 0; x < tablerows.Length; x++)
+        {
+            var total = document.getElementById("total")
+            grandTotal += total;
+            return grandtotal = document.getElementById("grandTotal").innerHTML
+        }
+    }
+
+
+</script>

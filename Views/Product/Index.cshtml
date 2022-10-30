@@ -1,0 +1,159 @@
+﻿@model PagedList.IPagedList<u21478377_HW06.ViewModels.ProductVM>
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Products</h1>
+
+
+
+<div>
+    @using (Html.BeginForm("Index", "ProductController", FormMethod.Get))
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <p style="float: right">
+                            <b> Search Option: </b>
+                            @Html.TextBox("TextboxSearchString", ViewBag.CurrentFilterTextbox as string)
+                            <input type="submit" value="Search" class="btn btn-sm btn-info" />
+                        </p>
+                    </td>
+                    <!--modals-->
+                   <td>
+                        <div id="createModal" class="modal hide" role="dialog">
+                            <a asp-action="Create" class="btn btn-sm btn-primary" id="create" )>Create New @Html.Partial("_Create")</a>
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+
+        <table class="table .table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <p align="left">
+                            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilterTextbox = ViewBag.CurrentFilterTextbox })
+                        </p>
+                    </th>
+                    <th>
+                        <p align="left">
+                            @Html.ActionLink("Year", "Index", new { sortOrder = ViewBag.YearSortParm, currentFilterTextbox = ViewBag.CurrentFilterTextbox })
+                        </p>
+                    </th>
+                    <th>
+                        <p align="left">
+                            @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentFilterTextbox = ViewBag.CurrentFilterTextbox })
+                        </p>
+                    </th>
+                    <th>
+                        <p align="left">
+                            @Html.ActionLink("Brand", "Index", new { sortOrder = ViewBag.BrandSortParm, currentFilterTextbox = ViewBag.CurrentFilterTextbox })
+                        </p>
+                    </th>
+                    <th>
+                        <p align="left">
+                            @Html.ActionLink("Category", "Index", new { sortOrder = ViewBag.CategorySortParm, currentFilterTextbox = ViewBag.CurrentFilterTextbox })
+                        </p>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductDetails.ProductName)-
+                            @Html.DisplayFor(modelItem => item.ProductDetails.ModelYear)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductDetails.ModelYear)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductDetails.ListPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BrandDetails.BrandName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CategoryDetails.CategoryName)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ProductDetails.ProductId" class="btn btn-sm btn-info " id="edit">Edit @Html.Partial("_Edit")</a> |
+                            <a asp-action="Details" asp-route-id="@item.ProductDetails.ProductId" class="btn btn-sm btn-primary" id="details">Details @Html.Partial("_Details")</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ProductDetails.ProductId" class="btn btn-sm btn-danger" id="delete">Delete  @Html.Partial("_Delete")</a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+<div>
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+
+</div>
+<script>
+//ajax requests
+
+    //edit
+ $.ajax({
+    url: "Edit",
+    type: "get",
+    success: function (result) {
+    $('#edit').html(result);
+    },
+
+//details
+    $.ajax({
+    url: "Details",
+    type: "get",
+    success: function (result) {
+    $('#details').html(result);
+    },
+
+    //delete
+    $.ajax({
+    url: "Delete",
+    type: "get",
+    success: function (result) {
+    $('#delete').html(result);
+        },
+        $(document).on('click', '#delete', function () {
+            var url = 'delete';
+            $.ajax({
+                type: 'GET',
+                url: "Delete",
+                success: function (output) {
+                    $('#Modal').html(output).modal('show');
+                },
+                error: function (output) {
+                    alert("fail");
+                }
+            });
+
+    //alt way to call/request, this immediately to modal
+    //create
+        $(document).on('click', '#create', function ()
+        {
+            var url = 'create';
+            $.ajax({
+                type: 'GET',
+                url: "Create",
+                success: function (output) {
+                $('#createModal').html(output).modal('show');
+                },
+                error: function(output){
+                alert("fail");
+                }
+        });
+});
+    </script>
